@@ -10,7 +10,7 @@ svarthree = Console.ReadLine();
 string svarfour;
 Console.WriteLine("Snälla säg varför du valde den maten");
 svarfour = Console.ReadLine();
-Console.WriteLine($"Snart ska {svar} plocka upp en {svartwo} färgad {svarthree} för att {svarfour}");
+Console.WriteLine($"Snart ska {svar} plocka upp en {svartwo} färgad {svarthree} för att den {svarfour}");
 Console.ReadLine();
 
 
