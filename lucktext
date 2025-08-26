@@ -1,0 +1,16 @@
+string svar;
+Console.WriteLine("Vad heter du?");
+svar = Console.ReadLine();
+string svartwo;
+Console.WriteLine("Snälla säg en färg");
+svartwo = Console.ReadLine();
+string svarthree;
+Console.WriteLine("Snälla säg en mat");
+svarthree = Console.ReadLine();
+string svarfour;
+Console.WriteLine("Snälla säg varför du valde den maten");
+svarfour = Console.ReadLine();
+Console.WriteLine($" Idag ska {svar} äta {svartwo}  färgad {svarthree} för att {svarfour}");
+
+
+
