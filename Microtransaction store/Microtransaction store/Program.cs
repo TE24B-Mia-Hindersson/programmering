@@ -2,6 +2,7 @@
 string choice = "";
 string choice2 = "";
 string choice3 = "";
+List<string> items = new List<string>();
 Console.WriteLine("  -------------------------");
 Console.WriteLine("---===       ===       ===---");
 Console.WriteLine("");
@@ -46,6 +47,7 @@ while (money > 0)
             Console.WriteLine("   You have chosen my magical glowing amethyst ring!");
             Console.WriteLine($"    This item has removed {amethystring} coins from your wallet");
             money -= amethystring;
+            items.Add("Magical glowing amethyst ring");
             Console.WriteLine($"          You now have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
@@ -54,9 +56,10 @@ while (money > 0)
         else if (choice.ToLower() == "2" && money >= 20)
         {
             Console.WriteLine("--------------------------------------------------------");
-            Console.WriteLine("        You have chosen my gorgeous amulet !");
+            Console.WriteLine("        You have chosen my gorgeous amulet!");
             Console.WriteLine($"    This item has removed {amulet} coins from your wallet");
             money -= amulet;
+            items.Add("Gorgeous amulet");
             Console.WriteLine($"          You now have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
@@ -68,6 +71,7 @@ while (money > 0)
             Console.WriteLine("You have chosen my pearl from the deepest depths of the ocean!");
             Console.WriteLine($"     This item has removed {pearl} coins from your wallet");
             money -= pearl;
+            items.Add("Pearl from the deepest depths of the ocean");
             Console.WriteLine($"          You now have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
@@ -123,6 +127,7 @@ while (money > 0)
             Console.WriteLine("         You have chosen my mystical flower!");
             Console.WriteLine($"    This item has removed {flower} coins from your wallet");
             money -= flower;
+            items.Add("Mystical flower");
             Console.WriteLine($"         You now have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
@@ -134,6 +139,7 @@ while (money > 0)
             Console.WriteLine("          You have chosen my goblin horn!");
             Console.WriteLine($"    This item has removed {horn} coins from your wallet");
             money -= horn;
+            items.Add("Goblin horn");
             Console.WriteLine($"         You now have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
@@ -145,6 +151,7 @@ while (money > 0)
             Console.WriteLine("You have chosen my magical potion with powers of invisibility!");
             Console.WriteLine($"    This item has removed {potion} coins from your wallet");
             money -= potion;
+            items.Add("Potion with powers of invisibility");
             Console.WriteLine($"          You now have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
@@ -200,6 +207,7 @@ while (money > 0)
             Console.WriteLine("       You have chosen my basic wizards hat!");
             Console.WriteLine($"    This item has removed {hat} coins from your wallet");
             money -= hat;
+            items.Add("Basic wizards hat");
             Console.WriteLine($"          You now have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
@@ -211,6 +219,7 @@ while (money > 0)
             Console.WriteLine("You have chosen the dragons tooth that was harvested with precision!");
             Console.WriteLine($"    This item has removed {tooth} coins from your wallet");
             money -= tooth;
+            items.Add("Dragons tooth that was harvested with precision");
             Console.WriteLine($"          You now have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
@@ -223,6 +232,7 @@ while (money > 0)
             Console.WriteLine("                           ._.");
             Console.WriteLine($"    This item has removed {wand} coins from your wallet");
             money -= wand;
+            items.Add("My own wand!!");
             Console.WriteLine($"            You now have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
@@ -250,13 +260,27 @@ while (money > 0)
             continue;
         }
     }
+    string response = Console.ReadLine().Trim().ToLower();
     if (money == 0)
     {
         Console.Clear();
         Console.WriteLine("--------------------------------------------------------");
         Console.WriteLine("                You have no money left");
         Console.WriteLine("                  GET OUT OF HERE!!");
-       Console.WriteLine("--------------------------------------------------------");
+        Console.WriteLine("                 Current items:");
+
+        if (items.Count > 0)
+        {
+            foreach (var item in items)
+            {
+                Console.WriteLine($"                - {item}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("            No items purchased yet.");
+        }
+        Console.WriteLine("--------------------------------------------------------");
         Console.ReadLine();
     }
     else if (money >= 0)
@@ -264,15 +288,47 @@ while (money > 0)
         Console.Clear();
         Console.WriteLine("--------------------------------------------------------");
         Console.WriteLine("         Would you like to take another look?");
-        Console.WriteLine("                  Current items:");
-        Console.WriteLine($"                         ");
-        Console.WriteLine("--------------------------------------------------------");
+        Console.WriteLine("                 Current items:");
 
-        string response = Console.ReadLine().Trim().ToLower();
+        if (items.Count > 0)
+        {
+            foreach (var item in items)
+            {
+                Console.WriteLine($"            - {item}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("            No items purchased yet.");
+        }
+        Console.WriteLine("--------------------------------------------------------");
 
         if (response != "no")
         {
             Console.Clear();
+            Console.WriteLine("--------------------------------------------------------");
+            Console.WriteLine("           Thank you for coming to my shop!");
+            Console.WriteLine($"         You have {money} coins remaining..");
+            Console.WriteLine($"            Have a continued nice day!!");
+            Console.WriteLine("                 Current items:");
+
+            if (items.Count > 0)
+            {
+                foreach (var item in items)
+                {
+                    Console.WriteLine($"            - {item}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("            No items purchased yet.");
+            }
+
+            Console.WriteLine("--------------------------------------------------------");
+            Console.ReadLine();
+            Console.Clear();
+            Console.ReadLine();
+            break;
         }
 
         else if (response != "yes")
@@ -281,15 +337,42 @@ while (money > 0)
             Console.WriteLine("--------------------------------------------------------");
             Console.WriteLine("           Thank you for coming to my shop!");
             Console.WriteLine($"         You have {money} coins remaining..");
+            Console.WriteLine("                 Current items:");
+
+            if (items.Count > 0)
+            {
+                foreach (var item in items)
+                {
+                    Console.WriteLine($"            - {item}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("            No items purchased yet.");
+            }
+
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
             Console.Clear();
         }
-        else 
+        else
         {
             Console.Clear();
             Console.WriteLine("--------------------------------------------------------");
             Console.WriteLine("   I assume that is a no.. Goodbye");
+            Console.WriteLine("                 Current items:");
+
+            if (items.Count > 0)
+            {
+                foreach (var item in items)
+                {
+                    Console.WriteLine($"            - {item}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("            No items purchased yet.");
+            }
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
         }
