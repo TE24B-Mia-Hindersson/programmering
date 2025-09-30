@@ -78,8 +78,8 @@ while (money > 0)
             Console.WriteLine("--------------------------------------------------------");
             Console.WriteLine("       You decided not to buy anything this round.");
             Console.WriteLine("                      How sad!");
-            Console.WriteLine("           Keep your money for now then..");
-            Console.WriteLine($"           You have {money} coins left!");
+            Console.WriteLine("            Keep your money for now then..");
+            Console.WriteLine($"             You have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
             break;
@@ -155,8 +155,8 @@ while (money > 0)
             Console.WriteLine("--------------------------------------------------------");
             Console.WriteLine("      You decided not to buy anything this time.");
             Console.WriteLine("                      How sad!");
-            Console.WriteLine("             Keep your money for now then..");
-            Console.WriteLine($"             You have {money} coins left!");
+            Console.WriteLine("              Keep your money for now then..");
+            Console.WriteLine($"               You have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
             break;
@@ -223,7 +223,7 @@ while (money > 0)
             Console.WriteLine("                           ._.");
             Console.WriteLine($"    This item has removed {wand} coins from your wallet");
             money -= wand;
-            Console.WriteLine($"           You now have {money} coins left!");
+            Console.WriteLine($"            You now have {money} coins left!");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
             break;
@@ -264,16 +264,18 @@ while (money > 0)
         Console.Clear();
         Console.WriteLine("--------------------------------------------------------");
         Console.WriteLine("         Would you like to take another look?");
+        Console.WriteLine("                  Current items:");
+        Console.WriteLine($"                         ");
         Console.WriteLine("--------------------------------------------------------");
 
         string response = Console.ReadLine().Trim().ToLower();
 
-        if (response != "yes")
+        if (response != "no")
         {
             Console.Clear();
         }
 
-        else if (response != "no")
+        else if (response != "yes")
         {
             Console.Clear();
             Console.WriteLine("--------------------------------------------------------");
@@ -283,11 +285,11 @@ while (money > 0)
             Console.ReadLine();
             Console.Clear();
         }
-        else if (response != "")
+        else 
         {
             Console.Clear();
             Console.WriteLine("--------------------------------------------------------");
-            Console.WriteLine("   I assume your unresponsivness is a no.. Goodbye");
+            Console.WriteLine("   I assume that is a no.. Goodbye");
             Console.WriteLine("--------------------------------------------------------");
             Console.ReadLine();
         }
