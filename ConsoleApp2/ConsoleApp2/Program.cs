@@ -26,6 +26,7 @@ while (name.Length <= 1 || name.Length >= 12)
 // -- stat distrubution --
 List<string> StatName = ["Strength", "Perception", "Endurance", "Charisma", "Intelligence", "Agility", "Luck"];
 List<int> siffers = [0, 0, 0, 0, 0, 0, 0];
+List<string> memories;
 DistrubuteStats(siffers, StatName);
 Console.ReadLine();
 Console.Clear();
@@ -99,19 +100,10 @@ else if (WaterChoice == "3")
 Console.ReadLine();
 Console.Clear();
 // -- intro to radiation --
-if (radiation >= 10)
-{
-    Console.WriteLine("\nYou feel weak");
-    Console.WriteLine("Your body feels strange.. the radiation might be effecting you.");
-    playerhealth -= 1;
-}
-Console.WriteLine($"Health: {playerhealth}");
-Console.WriteLine($"Radiation: {radiation}");
-Console.ReadLine();
-Console.Clear();
+applyradiation(playerhealth, radiation);
 
 // -- first fight encounter --
-threat(gamestage, playerhealth);
+playerhealth = threat(gamestage, playerhealth);
 if (playerhealth <= 0)
 {
     Console.WriteLine("You have died!");
@@ -119,22 +111,44 @@ if (playerhealth <= 0)
     return;
 }
 Console.WriteLine("After a near death experience, and one of your first combat encounters you quickly move as far away from the area as possible.");
-Console.WriteLine("Suddenly you arrive at an old abandoned road. The road almost crumbling under your feet..");
+Console.WriteLine("Suddenly you arrive at an old abandoned road.");
 Console.WriteLine("Continuing forward you start to notice signs of human life..");
 Console.WriteLine("You discover a small settlement. A sign hangs ifront of a wooden wall.. 'Ash hallow'");
 // --Ash hallow--
 Console.ReadLine();
 Console.Clear();
 Console.WriteLine("A guard stops you..");
-guarddialogue();
-static void guarddialogue()
+Console.WriteLine("Guard: Halt! Explain your purpose for coming here!");
+Console.WriteLine("1) 'I am just a traveler seeking shelter.. i mean no harm!' \n2) 'None of your business.' \n3) Stay silent.");
+string dialoguechoice = Console.ReadLine();
+dialogue(dialoguechoice);
+static void applyradiation(int playerhealth, int radiation)
 {
-    Console.WriteLine("Guard: Halt! Explain your purpose for coming here!");
-    Console.WriteLine("1) 'I am just a traveler seeking shelter.. i mean no harm!' \n2) 'None of your business.' \n3) Stay silent.");
-    string dialoguechoice = Console.ReadLine();
-
+    if (radiation >= 10)
+    {
+        Console.WriteLine("\nYou feel weak");
+        Console.WriteLine("Your body feels strange.. the radiation might be effecting you.");
+        playerhealth -= 1;
+    }
+    if (radiation >= 20)
+    {
+        Console.WriteLine("\nYou feel incredibly weak and nautious");
+        Console.WriteLine("Your body feels like its decaying.. the radiation is effecting you.");
+        playerhealth -= 3;
+    }
+    Console.WriteLine($"Health: {playerhealth}");
+    Console.WriteLine($"Radiation: {radiation}");
+    Console.ReadLine();
+    Console.Clear();
 }
-static void threat(int gamestage, int playerhealth)
+static void dialogue(string dialoguechoice)
+{
+    if (dialoguechoice == "1")
+    {
+        
+    }
+}
+static int threat(int gamestage, int playerhealth)
 {
     Random rng = new Random();
     string enemy;
@@ -201,6 +215,7 @@ static void threat(int gamestage, int playerhealth)
         }
     }
     Console.WriteLine($"After the fight your health is: {playerhealth}");
+    return playerhealth;
 }
 static int DistrubuteStats(List<int> siffers, List<string> namestat)
 {
