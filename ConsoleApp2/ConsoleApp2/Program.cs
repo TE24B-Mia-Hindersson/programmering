@@ -33,7 +33,7 @@ Console.Clear();
 Console.WriteLine($"Welcome, {name} \n");
 ShowStats(siffers, StatName);
 gamestage++;
-Console.WriteLine("press enter to leave (story stuff)");
+Console.WriteLine("press enter to leave");
 Console.ReadLine();
 Console.Clear();
 // -- main story begins --
@@ -42,13 +42,13 @@ int radiation = 0;
 if (siffers[1] >= 5) // perception check (if perception is chosen stat: applies)
 // --LAKE--
 {
-    Console.WriteLine("\n Your sharp senses notice strange footprints in the dirt");
+    Console.WriteLine("\nYour sharp senses notice strange footprints in the dirt");
     Console.WriteLine("Following the tracks, you arrive at a small lake");
     Console.WriteLine("The water is strangely clear");
 }
 else
 {
-    Console.WriteLine("\n You feel uneasy, but you cant pinpoint why");
+    Console.WriteLine("\nYou feel uneasy, but you cant pinpoint why");
     Console.WriteLine("You walk between the trees..");
     Console.WriteLine("Suddenly you fall down and injure yourself");
     Console.WriteLine("Upon getting back up you notice a lake a while infront of you");
@@ -154,7 +154,7 @@ else if (guarddialoguechoice == "3")
 //perception comes in handy typ
 if (siffers[1] >= 5)
     {
-        Console.WriteLine("You maintain eyecontact confidently. \nThe guard lets you past");
+        Console.WriteLine("You maintain eye contact confidently. \nThe guard lets you past");
         reputation += 1; //cancels prior hit to reputation
     }
     else
@@ -270,6 +270,15 @@ else
 Console.WriteLine("QUEST completed: The Old Bunker"); 
 Console.ReadLine();
 Console.Clear();
+Console.WriteLine("That night, you struggle to sleep.. \nYour head throbs as fragments of memory return..");
+Addmemories(memories, "A voice echoes: 'Subject stability failing.. increase sedation levels..'")
+Console.ReadLine();
+Console.Clear();
+Console.WriteLine("You wake up suddenly. \nSomething feels.. wrong \nOutside you hear shouting.");
+Console.ReadLine();
+Console.Clear();
+//--Problem--
+
 static int applyradiation(int playerhealth, int radiation)
 {
     if (radiation >= 10)
@@ -357,6 +366,8 @@ static int threat(int gamestage, int playerhealth)
         {
             Console.WriteLine("Invalid choice!!");
         }
+         Console.ReadLine();
+    Console.Clear();
     }
     Console.WriteLine($"After the fight your health is: {playerhealth}");
     return playerhealth;
