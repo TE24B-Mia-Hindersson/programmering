@@ -73,6 +73,7 @@ if (WaterChoice == "1")
     siffers[2] += 1; //endurance
     Console.WriteLine("Endurance +1");
     Addmemories(memories, "A burning sensation.. a lab.. people screaming about contamination");
+    Console.ReadLine();
 }
 else if (WaterChoice == "2")
 {
@@ -80,6 +81,7 @@ else if (WaterChoice == "2")
     Console.WriteLine("You decide to not risk drinking it..");
     siffers[6] += 1; //luck
     Console.WriteLine("Luck +1");
+    Console.ReadLine();
 }
 else if (WaterChoice == "3")
 {
@@ -92,14 +94,15 @@ else if (WaterChoice == "3")
         siffers[4] += 1; //intelligence 
         Console.WriteLine("Intelligence +1");
         Addmemories(memories, "You remember studying water samples... were you a scientist?");
+       Console.ReadLine();
     }
     else
     {
         Console.WriteLine("\nYou stare at the water and cant decide if anythings wrong..");
         Console.WriteLine("You end up not drinking any.");
+        Console.ReadLine();
     }
 }
-Console.ReadLine();
 Console.Clear();
 // -- intro to radiation --
 playerhealth = applyradiation(playerhealth, radiation);
@@ -276,6 +279,7 @@ Console.WriteLine("That night, you struggle to sleep.. \nYour head throbs as fra
 Addmemories(memories, "A voice echoes: 'Subject stability failing.. increase sedation levels..'");
 Console.ReadLine();
 Console.Clear();
+Showmemories(memories); //temp fix till i can be bothered to add a way to look at memories whenever 
 Console.WriteLine("You wake up suddenly. \nSomething feels.. wrong \nOutside you hear shouting.");
 Console.ReadLine();
 Console.Clear();
