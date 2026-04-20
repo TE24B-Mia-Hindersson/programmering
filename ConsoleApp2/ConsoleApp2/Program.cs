@@ -24,21 +24,21 @@ while (name.Length <= 1 || name.Length >= 12) //stoppar spelaren från att ha et
     Console.Clear();
 }
 // -- stat distrubution --
-List<string> StatName = ["Strength", "Perception", "Endurance", "Charisma", "Intelligence", "Agility", "Luck"];
-List<int> siffers = [0, 0, 0, 0, 0, 0, 0];
-List<string> memories = new List<string>(); //stores memories
+List<string> StatName = ["Strength", "Perception", "Endurance", "Charisma", "Intelligence", "Agility", "Luck"];//stat namnen
+List<int> siffers = [0, 0, 0, 0, 0, 0, 0]; //isoldes namn för siffror... Tar siffer input från distrubutestats metoden och stoppar in dem här
+List<string> memories = new List<string>(); //stores memories 
 DistrubuteStats(siffers, StatName);
 Console.ReadLine();
 Console.Clear();
-Console.WriteLine($"Welcome, {name} \n");
+Console.WriteLine($"Welcome, {name}");
 ShowStats(siffers, StatName);
-gamestage++;
+gamestage++; 
 Console.WriteLine("press enter to leave");
 Console.ReadLine();
 Console.Clear();
 // -- main story begins --
 int playerhealth = 20;
-int radiation = 0;
+int radiation = 0; 
 if (siffers[1] >= 5) // perception check (if perception is chosen stat: applies)
 // --LAKE--
 {
@@ -190,6 +190,7 @@ else
 Console.ReadLine();
 Console.Clear();
  Console.WriteLine("You step inside Ash Hollow..");
+ //for now this has no purpose
  if (reputation >= 3) 
 {
      Console.WriteLine("People seem to welcome you");
@@ -229,6 +230,7 @@ Console.WriteLine("QUEST: Investigate The Old Bunker");
 Console.WriteLine("Press enter to continue..");
 Console.ReadLine();
 Console.Clear();
+//-- 1st QUEST begins--
 Console.WriteLine("You leave Ash Hallow and head towards the bunker.. trying to stay safe.");
 threat(gamestage, playerhealth);
 Console.WriteLine("You stumble forward to your destination");
@@ -248,7 +250,7 @@ else if (bunkerchoice == "2")
     Console.WriteLine("You find an old rusty computer. You power on the old terminal");
     Addmemories(memories, "Cryosleep program initiated... world collapse imminent... YOU were part of it...");
 }
-//BIG story thing 
+//BIG story thing
 Addmemories(memories, "You remember entering a cryosleep chamber willingly.. why?");
 Console.ReadLine();
 Console.Clear();
@@ -271,14 +273,13 @@ Console.WriteLine("QUEST completed: The Old Bunker");
 Console.ReadLine();
 Console.Clear();
 Console.WriteLine("That night, you struggle to sleep.. \nYour head throbs as fragments of memory return..");
-Addmemories(memories, "A voice echoes: 'Subject stability failing.. increase sedation levels..'")
+Addmemories(memories, "A voice echoes: 'Subject stability failing.. increase sedation levels..'");
 Console.ReadLine();
 Console.Clear();
 Console.WriteLine("You wake up suddenly. \nSomething feels.. wrong \nOutside you hear shouting.");
 Console.ReadLine();
 Console.Clear();
 //--Problem--
-
 static int applyradiation(int playerhealth, int radiation)
 {
     if (radiation >= 10)
@@ -303,7 +304,7 @@ static int threat(int gamestage, int playerhealth)
 {
     Random rng = new Random(); //random gen
     string enemy;
-    //enemy depends on stage progression
+    //enemy depends on stage progression.. not working rn?
     if (gamestage <= 0)
     {
         string[] enemies = { "Mutated Rat", "Rad Roach" };
@@ -320,7 +321,7 @@ static int threat(int gamestage, int playerhealth)
         enemy = enemies[rng.Next(enemies.Length)];
     }
     int enemyHealth = 5 + (gamestage * 4);
-    int enemyDamage = 1 + gamestage;
+    int enemyDamage = 1 + (gamestage * 2);
     Console.WriteLine("\nYou suddenly hear movement in the forest");
     Console.WriteLine($"A {enemy} comes out from behind the trees!");
     Console.WriteLine($" Enemy Health: {enemyHealth}");
