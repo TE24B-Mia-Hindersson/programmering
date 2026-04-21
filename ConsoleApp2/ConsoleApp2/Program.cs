@@ -457,4 +457,3 @@ static void Showmemories(List<string> memories)
     }
 }
 Console.ReadLine();
-
