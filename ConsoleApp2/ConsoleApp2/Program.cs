@@ -12,7 +12,7 @@ List<string> StatName = ["Strength", "Perception", "Endurance", "Charisma", "Int
 List<int> stats = [0, 0, 0, 0, 0, 0, 0]; //Tar siffer input från distrubutestats metoden och stoppar in dem här
 List<string> memories = new List<string>(); //stores memories 
 List<string> inventory = new List<string>(); //stores items
-Random rng = new Random(); //random gen
+Random rng = new Random(); //random generetor
 // --GAME STARTS--
 Console.WriteLine("You slowly start to gain conciousness as the cryosleep chamber opens.. \nAs you look around you realize you have no recollection of anything. \nYou stand up, shakingly, and move slowly forward. \nYou glance at your surroundings and find an abandoned facility. You start to feel worried, thinking of what couldve happened. \nYour memory is hazy. You reach a mirror and peer into it.");
 Console.ReadLine();
