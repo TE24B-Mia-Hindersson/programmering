@@ -1,45 +1,38 @@
 ﻿
 
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+// --PLAYER DATA--
+int gamestage = 0; // vad spelets stadie beror på, ändrar difficulty
+int playerhealth = 20; //spelaren start hälsa
+int radiation = 0; //hur npc behandlar spelaren (har noll relevance just nu)
+int reputation = 0; //tracks how others view you
+List<string> StatName = ["Strength", "Perception", "Endurance", "Charisma", "Intelligence", "Agility", "Luck"];//stat namnen
+List<int> stats = [0, 0, 0, 0, 0, 0, 0]; //Tar siffer input från distrubutestats metoden och stoppar in dem här
+List<string> memories = new List<string>(); //stores memories 
+List<string> inventory = new List<string>(); //stores items
+Random rng = new Random(); //random gen
+// --GAME STARTS--
 Console.WriteLine("You slowly start to gain conciousness as the cryosleep chamber opens.. \nAs you look around you realize you have no recollection of anything. \nYou stand up, shakingly, and move slowly forward. \nYou glance at your surroundings and find an abandoned facility. You start to feel worried, thinking of what couldve happened. \nYour memory is hazy. You reach a mirror and peer into it.");
 Console.ReadLine();
-Console.Clear(); 
-int gamestage = 0; // vad spelets stadie beror på, ändrar difficulty
-// -- name selection--
+Console.Clear();
+// --NAME SELECTION--
 string name = ""; //plats för ditt namn
-while (name.Length <= 1 || name.Length >= 12) //stoppar spelaren från att ha ett för kort/långt namn
-{
-    Console.WriteLine("Upon seeing your reflection you gain a glimps into your memory... Your name is:");
-    name = Console.ReadLine();
-    if (name.Length <= 1)
-    {
-        Console.WriteLine("Thats very short... try again?");
-    }
-    if (name.Length >= 12)
-    {
-        Console.WriteLine("Thats very long... try again?");
-    }
-    Console.ReadLine();
-    Console.Clear();
-}
-// -- stat distrubution --
-List<string> StatName = ["Strength", "Perception", "Endurance", "Charisma", "Intelligence", "Agility", "Luck"];//stat namnen
-List<int> siffers = [0, 0, 0, 0, 0, 0, 0]; //isoldes namn för siffror... Tar siffer input från distrubutestats metoden och stoppar in dem här
-List<string> memories = new List<string>(); //stores memories 
-DistrubuteStats(siffers, StatName);
+name = Getname(name);
+// --STAT DISTRUBUTION --
+DistrubuteStats(stats, StatName);
 Console.ReadLine();
 Console.Clear();
 Console.WriteLine($"Welcome, {name}");
-ShowStats(siffers, StatName);
-gamestage++; 
+inventory.Add("Medkit"); //starter item
+ShowStats(stats, StatName);
+gamestage++;
 Console.WriteLine("press enter to leave");
 Console.ReadLine();
 Console.Clear();
-// -- main story begins --
-int playerhealth = 20;
-int radiation = 0; 
-if (siffers[1] >= 5) // perception check (if perception is chosen stat: applies)
+// -- MAIN STORY BEGIN -- 
+if (stats[1] >= 5) // perception check (if perception is chosen stat: applies)
 // --LAKE--
 {
     Console.WriteLine("\nYour sharp senses notice strange footprints in the dirt");
@@ -58,9 +51,9 @@ else
 Console.WriteLine("1) Drink some");
 Console.WriteLine("2) Leave it alone..");
 Console.WriteLine("3) Examine the water");
-string WaterChoice = Console.ReadLine();
+int lakechoice = Getchoice(1, 3);
 
-if (WaterChoice == "1")
+if (lakechoice == 1)
 {
     Console.WriteLine("You drink the water.");
     Console.WriteLine("The water has an odd taste that almost burns your mouth");
@@ -70,31 +63,31 @@ if (WaterChoice == "1")
     Console.WriteLine("Radiation +10");
     Console.WriteLine("Health -4");
     //explain radiation and health?
-    siffers[2] += 1; //endurance
+    stats[2] += 1; //endurance
     Console.WriteLine("Endurance +1");
     Addmemories(memories, "A burning sensation.. a lab.. people screaming about contamination");
     Console.ReadLine();
 }
-else if (WaterChoice == "2")
+else if (lakechoice == 2)
 {
     Console.WriteLine("Something about the water feels off...");
     Console.WriteLine("You decide to not risk drinking it..");
-    siffers[6] += 1; //luck
+    stats[6] += 1; //luck
     Console.WriteLine("Luck +1");
     Console.ReadLine();
 }
-else if (WaterChoice == "3")
+else if (lakechoice == 3)
 {
-    if (siffers[4] >= 4 || siffers[1] >= 4) //intelligence or perception which allows better observation
+    if (stats[4] >= 4 || stats[1] >= 4) //intelligence or perception which allows better observation
     {
         Console.WriteLine("\nLooking closely at the water..");
         Console.WriteLine("You notice dead fish floating beneath the surface");
         Console.WriteLine("A strange oily residue moves across the water..");
         Console.WriteLine("This water is contaminated!");
-        siffers[4] += 1; //intelligence 
+        stats[4] += 1; //intelligence 
         Console.WriteLine("Intelligence +1");
         Addmemories(memories, "You remember studying water samples... were you a scientist?");
-       Console.ReadLine();
+        Console.ReadLine();
     }
     else
     {
@@ -108,54 +101,56 @@ Console.Clear();
 playerhealth = applyradiation(playerhealth, radiation);
 
 // -- first fight encounter --
-playerhealth = threat(gamestage, playerhealth);
+// playerhealth = threat(gamestage, playerhealth);
+playerhealth = combat(gamestage, playerhealth, stats, inventory, rng);
 if (playerhealth <= 0)
 {
     Console.WriteLine("You have died!");
     Console.WriteLine("Game over..");
     return;
 }
-Console.WriteLine("After a near death experience, and one of your first combat encounters you quickly move as far away from the area as possible.");
-Console.WriteLine("Suddenly you arrive at an old abandoned road.");
-Console.WriteLine("Continuing forward you start to notice signs of human life..");
+Console.WriteLine("After a near death experience, and one of your first combat encounters you quickly move as far away from the area as possible. \nSuddenly you arrive at an old abandoned road. \nContinuing forward you start to notice signs of human life..");
+Console.WriteLine("You see a corpse ahead.. \nYou decide to search it.");
+
+// inventory check..
+Getitem(inventory, "Medkit");
 Console.WriteLine("You discover a small settlement. A sign hangs ifront of a wooden wall.. 'Ash hallow'");
 // --Ash hallow--
 Console.ReadLine();
 Console.Clear();
-int reputation = 0; //tracks how others view you
 Console.WriteLine("A guard stops you..");
 Console.WriteLine("Guard: Halt! Explain your purpose for coming here!");
 Console.WriteLine("1) 'I am just a traveler seeking shelter.. i mean no harm!' \n2) 'None of your business.' \n3) Stay silent. \n4) *lie* I am a trader with supplies!");
-string guarddialoguechoice = Console.ReadLine();
-   if (guarddialoguechoice == "1") 
-     {
-        //good outcome 
-       Console.WriteLine("Guard: Alright, ill let you in. You seem trustworthy enough.."); 
-        siffers[3] += 1;
-        reputation += 2;
-        Console.WriteLine("You gained trust in ash hollow.. \nCharisma +1"); 
-        //bonus if charisma already high
-        if (siffers[3]  >= 5)
+int guarddialoguechoice = Getchoice(1, 4);
+if (guarddialoguechoice == 1)
+{
+    //good outcome 
+    Console.WriteLine("Guard: Alright, ill let you in. You seem trustworthy enough..");
+    stats[3] += 1;
+    reputation += 2;
+    Console.WriteLine("You gained trust in ash hollow.. \nCharisma +1");
+    //bonus if charisma already high
+    if (stats[3] >= 5)
     {
-         Console.WriteLine("Guard: We could use someone like you around these parts.."); 
-         reputation += 1;
+        Console.WriteLine("Guard: We could use someone like you around these parts..");
+        reputation += 1;
     }
-    }
-else if (guarddialoguechoice == "2")
-    {
-        //bad outcome
-       Console.WriteLine("Guard: Dont even joke lad."); 
-       reputation -= 1;
-       playerhealth -= 2;
-        Console.WriteLine("The guard shoves you back! \nHealth -2"); 
-    }
-else if (guarddialoguechoice == "3")
-    {
-        //neautral/suspicious
-       Console.WriteLine("The guard watches you carefully.. \nGuard: You arent very talkative are you?"); 
-       reputation --;
-//perception comes in handy typ
-if (siffers[1] >= 5)
+}
+else if (guarddialoguechoice == 2)
+{
+    //bad outcome
+    Console.WriteLine("Guard: Dont even joke lad.");
+    reputation -= 1;
+    playerhealth -= 2;
+    Console.WriteLine("The guard shoves you back! \nHealth -2");
+}
+else if (guarddialoguechoice == 3)
+{
+    //neautral/suspicious
+    Console.WriteLine("The guard watches you carefully.. \nGuard: You arent very talkative are you?");
+    reputation--;
+    //perception comes in handy typ
+    if (stats[1] >= 5)
     {
         Console.WriteLine("You maintain eye contact confidently. \nThe guard lets you past");
         reputation += 1; //cancels prior hit to reputation
@@ -164,13 +159,13 @@ if (siffers[1] >= 5)
     {
         Console.WriteLine("The guard seems suspisious but lets you in");
     }
-    } 
-    else if (guarddialoguechoice == "4")
+}
+else if (guarddialoguechoice == 4)
 {
     //risky choice 
     Console.WriteLine("Guard: Oh really? A trader? What are you selling?");
-//intelligence or charisma comes in handy
-if (siffers[4]>= 4 || siffers[3] >= 4)
+    //intelligence or charisma comes in handy
+    if (stats[4] >= 4 || stats[3] >= 4)
     {
         Console.WriteLine("You quickly come up with a believable story");
         reputation += 2;
@@ -186,46 +181,42 @@ if (siffers[4]>= 4 || siffers[3] >= 4)
         Console.WriteLine("Health -4");
     }
 }
-else
-{
-    Console.WriteLine("Invalid choice!");
-}
 Console.ReadLine();
 Console.Clear();
- Console.WriteLine("You step inside Ash Hollow..");
- //for now this has no purpose
- if (reputation >= 3) 
+Console.WriteLine("You step inside Ash Hollow..");
+//for now this has no purpose
+if (reputation >= 3)
 {
-     Console.WriteLine("People seem to welcome you");
+    Console.WriteLine("People seem to welcome you");
 }
- else if (reputation <= -2) 
+else if (reputation <= -2)
 {
-     Console.WriteLine("People seem to avoid you.. whispering as you pass");
-}
-else 
-{
-     Console.WriteLine("No one takes notice to you");
-}
-Console.WriteLine ("People move cautiously and many look sick.. \nA man approaches you, he seems to be the leader.");
-Console.ReadLine();
-Console.Clear();
- Console.WriteLine("Leader: You dont look like you are from around here.. \nLeader: The names Rohan. I keep this place together.");
- Console.WriteLine("1) Ask about the settlement. \n2) Ask about what happened to the world. \n3) Stay quiet");
- string leaderchoice = Console.ReadLine();
- if (leaderchoice == "1")
-{
-     Console.WriteLine("Rohan: We survived.. barely. Radiation took most of the land.");
-}
-if (leaderchoice == "2")
-{
-     Console.WriteLine("Rohan: Something went real wrong.. Maybe old world experiments? It happened so long ago all the folks who lived through it have died off");
-     Addmemories(memories, "A large underground facility.. alarms.. running frantically");
+    Console.WriteLine("People seem to avoid you.. whispering as you pass");
 }
 else
 {
-  Console.WriteLine("Rohan studies you silently...");
+    Console.WriteLine("No one takes notice to you");
 }
-gamestage ++;
+Console.WriteLine("People move cautiously and many look sick.. \nA man approaches you, he seems to be the leader.");
+Console.ReadLine();
+Console.Clear();
+Console.WriteLine("Leader: You dont look like you are from around here.. \nLeader: The names Rohan. I keep this place together.");
+Console.WriteLine("1) Ask about the settlement. \n2) Ask about what happened to the world. \n3) Stay quiet");
+int leaderchoice = Getchoice(1, 3);
+if (leaderchoice == 1)
+{
+    Console.WriteLine("Rohan: We survived.. barely. Radiation took most of the land.");
+}
+if (leaderchoice == 2)
+{
+    Console.WriteLine("Rohan: Something went real wrong.. Maybe old world experiments? It happened so long ago all the folks who lived through it have died off");
+    Addmemories(memories, "A large underground facility.. alarms.. running frantically");
+}
+else
+{
+    Console.WriteLine("Rohan studies you silently...");
+}
+gamestage++;
 Console.ReadLine();
 Console.Clear();
 Console.WriteLine("Rohan: Enough of this.. if you want to settle down here youll need to contribute! \nRohan: Theres an old research bunker nearby.. \nRohan: We think it has supplies... or maybe answers.");
@@ -235,20 +226,20 @@ Console.ReadLine();
 Console.Clear();
 //-- 1st QUEST begins--
 Console.WriteLine("You leave Ash Hallow and head towards the bunker.. trying to stay safe.");
-threat(gamestage, playerhealth);
+playerhealth = combat(gamestage, playerhealth, stats, inventory, rng);
 Console.WriteLine("You stumble forward to your destination");
 Console.WriteLine("Your head feels heavy and the air feels suffocating..");
 radiation += 7; //entering dangerous area
 Console.ReadLine();
 Console.Clear();
 Console.WriteLine("You find the bunker entrance.. \nInside everything is covered in dust. \n1)Search the room? \n2) Look for computers?");
-string bunkerchoice = Console.ReadLine();
-if (bunkerchoice == "1")
+int bunkerchoice = Getchoice(1, 2);
+if (bunkerchoice == 1)
 {
-  Console.WriteLine("You search through old containers.. \nYou find documents about raditation exposure.");  
-  Addmemories(memories, "Test subjects.. radiation trials.. this WASNT an accident.");
+    Console.WriteLine("You search through old containers.. \nYou find documents about raditation exposure.");
+    Addmemories(memories, "Test subjects.. radiation trials.. this WASNT an accident.");
 }
-else if (bunkerchoice == "2")
+else if (bunkerchoice == 2)
 {
     Console.WriteLine("You find an old rusty computer. You power on the old terminal");
     Addmemories(memories, "Cryosleep program initiated... world collapse imminent... YOU were part of it...");
@@ -259,20 +250,20 @@ Console.ReadLine();
 Console.Clear();
 Console.WriteLine("After some crazy finds you wander back to Ash Hollow. \nRohan: Youre back! What did you find? ");
 Console.WriteLine("1) Tell the truth \n2) Lie \n3) Say nothing");
-string reportchoice = Console.ReadLine();
-if (reportchoice == "1")
+int reportchoice = Getchoice(1, 3);
+if (reportchoice == 1)
 {
-  Console.WriteLine("Rohan: ....So it WAS caused by humans. \nRohan looks worried");  
+    Console.WriteLine("Rohan: ....So it WAS caused by humans. \nRohan looks worried");
 }
-else if (reportchoice == "2")
+else if (reportchoice == 2)
 {
-    Console.WriteLine("Rohan: I dont believe you. \nRohan looks annoyed"); 
+    Console.WriteLine("Rohan: I dont believe you. \nRohan looks annoyed");
 }
 else
 {
-    Console.WriteLine("Rohan: keeping secrets wont help anyone!"); 
+    Console.WriteLine("Rohan: keeping secrets wont help anyone!");
 }
-Console.WriteLine("QUEST completed: The Old Bunker"); 
+Console.WriteLine("QUEST completed: The Old Bunker");
 Console.ReadLine();
 Console.Clear();
 Console.WriteLine("That night, you struggle to sleep.. \nYour head throbs as fragments of memory return..");
@@ -284,6 +275,31 @@ Console.WriteLine("You wake up suddenly. \nSomething feels.. wrong \nOutside you
 Console.ReadLine();
 Console.Clear();
 //--Problem--
+Console.WriteLine("You rush outside \nPeople are panicking.");
+Console.WriteLine("Guard: Something attacked the outer wall \nGuard: We lost people..");
+Console.WriteLine("1) Help defend the settlement \n2) Stand back and observe \n3) Sneak off to investigate on your own");
+int crisischoice = Getchoice(1, 3);
+if (crisischoice == 1)
+{
+    Console.WriteLine("You rush in to help defend");
+    playerhealth = combat(gamestage + 1, playerhealth, stats, inventory, rng);
+    if (playerhealth <= 0)
+    {
+        Console.WriteLine("You fall in battle");
+        Console.ReadLine();
+        return;
+    }
+    Console.WriteLine("You ...");
+}
+else if (crisischoice == 2)
+{
+    Console.WriteLine("Rohan: I dont believe you. \nRohan looks annoyed");
+}
+else
+{
+    Console.WriteLine("Rohan: keeping secrets wont help anyone!");
+}
+// applies neg effect based on radiation level
 static int applyradiation(int playerhealth, int radiation)
 {
     if (radiation >= 10)
@@ -304,26 +320,32 @@ static int applyradiation(int playerhealth, int radiation)
     Console.Clear();
     return playerhealth;
 }
-static int threat(int gamestage, int playerhealth)
+static string getenemy(int gamestage, Random rng)
 {
-    Random rng = new Random(); //random gen
-    string enemy;
+
     //enemy depends on stage progression.. not working rn?
     if (gamestage <= 0)
     {
         string[] enemies = { "Mutated Rat", "Rad Roach" };
-        enemy = enemies[rng.Next(enemies.Length)];
+        return enemies[rng.Next(enemies.Length)];
     }
     else if (gamestage >= 3)
     {
         string[] enemies = { "Wild Dog", "Feral Human" };
-        enemy = enemies[rng.Next(enemies.Length)];
+        return enemies[rng.Next(enemies.Length)];
     }
     else
     {
         string[] enemies = { "Mutant Wolf", "Radiated Bear" };
-        enemy = enemies[rng.Next(enemies.Length)];
+        return enemies[rng.Next(enemies.Length)];
     }
+}
+// handles combat between a rnd gen enemy and player
+static int combat(int gamestage, int playerhealth, List<int> stats, List<string> inventory, Random rng)
+{
+    // get emeny based on gamestage
+    string enemy = getenemy(gamestage, rng);
+    // scales damage with gamestage
     int enemyHealth = 5 + (gamestage * 4);
     int enemyDamage = 1 + (gamestage * 2);
     Console.WriteLine("\nYou suddenly hear movement in the forest");
@@ -334,27 +356,31 @@ static int threat(int gamestage, int playerhealth)
     while (enemyHealth > 0 && playerhealth > 0)
     {
         Console.WriteLine($"\nYour health: {playerhealth}");
-        Console.WriteLine("Choose action: \n1)Attack \n2)Run");
-
-        string fightchoice = Console.ReadLine();
-        if (fightchoice == "1") //attack
+        Console.WriteLine("Choose action: \n1)Attack \n2)Run \n3)Use item");
+        // get valid input
+        int fightchoice = Getchoice(1, 3);
+        if (fightchoice == 1) //attack
         {
-            int damage = rng.Next(2, 7); //player dmg 
+            // player dmg is rnd + strength stat
+            int damage = rng.Next(2, 7) + stats[0]; //player dmg 
             enemyHealth -= damage;
             Console.WriteLine($"You hit the {enemy} for {damage} damage!");
+            // checks if enemy is still alive
             if (enemyHealth <= 0)
             {
                 Console.WriteLine($"You defeated the {enemy}!");
                 break;
             }
+            // enemy attacks back
             int enemyattack = rng.Next(1, enemyDamage + 1);
             playerhealth -= enemyattack;
             Console.WriteLine($"The {enemy} hits you for {enemyattack} damage");
         }
-        else if (fightchoice == "2") //run
+        else if (fightchoice == 2) //run
         {
-            int escape = rng.Next(0, 2); //1/2 chance 
-            if (escape == 1)
+            // chance to escape based on agility
+            int escapechance = rng.Next(0, 10); //1/2 chance 
+            if (escapechance < 5 + stats[5])
             {
                 Console.WriteLine("You managed to escape!");
                 break;
@@ -362,20 +388,26 @@ static int threat(int gamestage, int playerhealth)
             else
             {
                 Console.WriteLine("You failed to escape!");
+                // enemy gets a free hit
                 int enemyattack = rng.Next(1, enemyDamage + 1);
                 playerhealth -= enemyattack;
                 Console.WriteLine($"The {enemy} hits you for {enemyattack} damage!");
             }
         }
+        else if (fightchoice == 3)
+        {
+            // player uses an item from inven
+            UseItem(inventory, ref playerhealth);
+        }
         else
         {
             Console.WriteLine("Invalid choice!!");
         }
-         Console.ReadLine();
-    Console.Clear();
+        Console.ReadLine();
+        Console.Clear();
     }
     Console.WriteLine($"After the fight your health is: {playerhealth}");
-    return playerhealth;
+    return playerhealth; //returns updated health
 }
 static int DistrubuteStats(List<int> siffers, List<string> namestat)
 {
@@ -422,7 +454,7 @@ static int DistrubuteStats(List<int> siffers, List<string> namestat)
     }
     return 100;
 }
-static void ShowStats(List<int> siffers, List<string> StatName) 
+static void ShowStats(List<int> siffers, List<string> StatName)
 {
     Console.WriteLine("Your stats: \n");
     for (int i = 0; i < StatName.Count; i++)
@@ -437,7 +469,7 @@ static void Addmemories(List<string> memories, string memorytext)
     Console.WriteLine("--Memory unlocked--");
     Console.WriteLine(memorytext);
     Console.WriteLine("--------------------");
-Console.ReadLine();
+    Console.ReadLine();
 }
 
 static void Showmemories(List<string> memories)
@@ -445,7 +477,7 @@ static void Showmemories(List<string> memories)
     Console.WriteLine("\nYour memories:");
     if (memories.Count == 0)
     {
-    Console.WriteLine("You dont remember anything..");
+        Console.WriteLine("You dont remember anything..");
     }
     else
     {
@@ -454,6 +486,70 @@ static void Showmemories(List<string> memories)
         {
             Console.WriteLine("- " + mem);
         }
+    }
+}
+static string Getname(string name)
+{
+    while (name.Length <= 1 || name.Length >= 12) //stoppar spelaren från att ha ett för kort/långt namn
+    {
+        Console.WriteLine("Upon seeing your reflection you gain a glimps into your memory... Your name is:");
+        name = Console.ReadLine();
+        if (name.Length <= 1)
+        {
+            Console.WriteLine("Thats very short... try again?");
+        }
+        if (name.Length >= 12)
+        {
+            Console.WriteLine("Thats very long... try again?");
+        }
+        Console.ReadLine();
+        Console.Clear();
+    }
+
+    return name;
+}
+
+static int Getchoice(int min, int max)
+{
+    while (true)
+    {
+        string input = Console.ReadLine();
+        if (int.TryParse(input, out int val) && val >= min && val <= max)
+            return val;
+        Console.WriteLine("invalid choice");
+    }
+}
+
+static void Getitem(List<string> inventory, string item)
+{
+    inventory.Add(item);
+    Console.WriteLine($"You found: {item}!");
+}
+// allows player to use item from inv
+static void UseItem(List<string> inventory, ref int health)
+{
+    // checks if inv is empty
+    if (inventory.Count == 0)
+    {
+        Console.WriteLine("No item!");
+        return;
+    }
+    Console.WriteLine("Inventory:");
+    // displays all items with index nr
+    for (int i = 0; i < inventory.Count; i++)
+    {
+        Console.WriteLine($"{i + 1}) {inventory[i]} ");
+    }
+    Console.WriteLine("Choose item number!");
+    int itemchoice = Getchoice(1, inventory.Count);
+    string item = inventory[itemchoice - 1];
+    // handles item effect
+    if (item == "Medkit")
+    {
+        Console.WriteLine("You used a Medkit!");
+        health += 7;
+        // removes after use
+        inventory.RemoveAt(itemchoice - 1);
     }
 }
 Console.ReadLine();
