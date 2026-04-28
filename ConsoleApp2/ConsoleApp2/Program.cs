@@ -25,7 +25,7 @@ DistrubuteStats(stats, StatName);
 Console.ReadLine();
 Console.Clear();
 Console.WriteLine($"Welcome, {name}");
-inventory.Add("Medkit"); //starter item
+inventory.Add("Bandage"); //starter item
 ShowStats(stats, StatName);
 gamestage++;
 Console.WriteLine("press enter to leave");
@@ -550,6 +550,13 @@ static void UseItem(List<string> inventory, ref int health)
         health += 7;
         // removes after use
         inventory.RemoveAt(itemchoice - 1);
+    }
+    if (item == "Bandage");
+    {
+         Console.WriteLine("You used a Bandage!");
+        health += 4;
+        // removes after use
+        inventory.RemoveAt(itemchoice - 1);  
     }
 }
 Console.ReadLine();
