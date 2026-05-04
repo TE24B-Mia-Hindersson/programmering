@@ -551,7 +551,7 @@ static void UseItem(List<string> inventory, ref int health)
         // removes after use
         inventory.RemoveAt(itemchoice - 1);
     }
-    if (item == "Bandage");
+    if (item == "Bandage")
     {
          Console.WriteLine("You used a Bandage!");
         health += 4;
