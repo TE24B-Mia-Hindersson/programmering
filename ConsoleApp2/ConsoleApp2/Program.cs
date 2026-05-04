@@ -101,7 +101,6 @@ Console.Clear();
 playerhealth = applyradiation(playerhealth, radiation);
 
 // -- first fight encounter --
-// playerhealth = threat(gamestage, playerhealth);
 playerhealth = combat(gamestage, playerhealth, stats, inventory, rng);
 if (playerhealth <= 0)
 {
@@ -289,15 +288,19 @@ if (crisischoice == 1)
         Console.ReadLine();
         return;
     }
-    Console.WriteLine("You ...");
+    Console.WriteLine("to be continued");
 }
 else if (crisischoice == 2)
 {
-    Console.WriteLine("Rohan: I dont believe you. \nRohan looks annoyed");
+    Console.WriteLine("You stand and observe.. \nSuddenly a huge beast lunges at you and rips you apart.");
+    Console.WriteLine("You died. Better luck next time!");
+    return;
 }
 else
 {
-    Console.WriteLine("Rohan: keeping secrets wont help anyone!");
+    Console.WriteLine("You sneak away and run into a feral human.");
+    Console.WriteLine("You die.. sorry!");
+    return;
 }
 // applies neg effect based on radiation level
 static int applyradiation(int playerhealth, int radiation)
