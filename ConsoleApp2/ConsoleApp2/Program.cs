@@ -545,16 +545,16 @@ static void UseItem(List<string> inventory, ref int health)
     }
     Console.WriteLine("Choose item number!");
     int itemchoice = GetChoice(1, inventory.Count);
-    string item = inventory[itemchoice - 1];
+    string Item = inventory[itemchoice - 1];
     // handles item effect
-    if (item == "Medkit")
+    if (Item == "Medkit")
     {
         Console.WriteLine("You used a Medkit!");
         health += 7;
         // removes after use
         inventory.RemoveAt(itemchoice - 1);
     }
-    if (item == "Bandage")
+    if (Item == "Bandage")
     {
         Console.WriteLine("You used a Bandage!");
         health += 4;
